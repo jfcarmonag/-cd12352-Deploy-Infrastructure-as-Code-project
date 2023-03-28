@@ -20,8 +20,8 @@ Resources:
         #  ToPort: 22
         #  CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
-          FromPort: 8080
-          ToPort: 8080
+          FromPort: 80
+          ToPort: 80
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 80
@@ -127,10 +127,10 @@ Resources:
             service nginx start
 
         
-      ImageId: ami-005bdb005fb00e791
+      ImageId: ami-007855ac798b5175e
       SecurityGroups:
       - Ref: WebServerSecGroup
-      InstanceType: t3.medium
+      InstanceType: t3.micro
       BlockDeviceMappings:
       - DeviceName: "/dev/sdk"
         Ebs:
