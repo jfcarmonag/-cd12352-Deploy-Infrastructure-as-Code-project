@@ -134,3 +134,9 @@ Resources:
         - DeviceName: "/dev/sdk"
           Ebs:
             VolumeSize: '10'
+
+Outputs:
+  URL:
+    Description: Udagram
+    Value: !Join [ "", [ "http://", !GetAtt WebAppLB.DNSName ] ]
+    
