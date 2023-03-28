@@ -112,8 +112,7 @@ Resources:
               Values: [/]
             ListenerArn: !Ref Listener
             Priority: 1 
-  # Add your resources here
-  # We include a portion of the LaunchTemplate resource so you can use the UserData.
+  
   WebAppLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
     Properties: 
@@ -134,6 +133,27 @@ Resources:
         - DeviceName: "/dev/sdk"
           Ebs:
             VolumeSize: '10'
+
+  StaticWebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${EnvironmentName}-static-website"
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref StaticWebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "arn:aws:s3:::${StaticWebsiteBucket}/*"
 
 Outputs:
   URL:
