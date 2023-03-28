@@ -70,6 +70,7 @@ Resources:
         LaunchTemplate:    
           LaunchTemplateName: 
             Ref: "WebAppLaunchTemplate"
+          Version: !GetAtt WebAppLaunchTemplate.LatestVersionNumber
         MinSize: "3"
         MaxSize: "5"
         TargetGroupARNs:
