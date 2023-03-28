@@ -6,6 +6,25 @@ Parameters:
     Type: String
 
 Resources:
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - Ref: InstanceRole
 
   WebServerSecGroup:
     Type: AWS::EC2::SecurityGroup
@@ -113,26 +132,33 @@ Resources:
             ListenerArn: !Ref Listener
             Priority: 1 
   
+
+
+ 
   WebAppLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
-    Properties: 
+    Properties:
+      LaunchTemplateName: 'UdagramLaunchTemplate'
       LaunchTemplateData:
         UserData:
-          Fn::Base64: |
+          Fn::Base64: !Sub |
             #!/bin/bash
             apt-get update -y
-            sudo apt-get install nginx -y
-            service nginx start
-
-        
+            apt-get install nginx -y
+            apt-get install awscli -y
+            aws s3 sync s3://${StaticWebsiteBucket} /var/www/html
+            systemctl start nginx
+            systemctl enable nginx
         ImageId: ami-007855ac798b5175e
-        SecurityGroupIds:
-        - Ref: WebServerSecGroup
         InstanceType: t3.micro
+        SecurityGroupIds:
+          - Ref: WebServerSecGroup
+        IamInstanceProfile:
+          Arn: !GetAtt InstanceProfile.Arn
         BlockDeviceMappings:
-        - DeviceName: "/dev/sdk"
-          Ebs:
-            VolumeSize: '10'
+          - DeviceName: "/dev/sdk"
+            Ebs:
+              VolumeSize: '10'
 
   StaticWebsiteBucket:
     Type: AWS::S3::Bucket

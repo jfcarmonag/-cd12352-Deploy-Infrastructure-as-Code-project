@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Udagram</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4267B2;
+      color: white;
+      padding: 1rem;
+      font-size: 1.5rem;
+      width: 100%;
+      text-align: center;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-gap: 1rem;
+      padding: 1rem;
+      max-width: 1000px;
+    }
+    img {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Udagram
+  </header>
+  <section class="gallery">
+    <!-- Add image elements here -->
+    <img src="https://via.placeholder.com/300x200" alt="Sample image">
+    <img src="https://via.placeholder.com/300x200" alt="Sample image">
+    <img src="https://via.placeholder.com/300x200" alt="Sample image">
+    <img src="https://via.placeholder.com/300x200" alt="Sample image">
+  </section>
+</body>
+</html>
