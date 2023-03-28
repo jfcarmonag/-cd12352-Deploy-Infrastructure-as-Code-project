@@ -15,14 +15,7 @@ Resources:
         Fn::ImportValue:
           !Sub "${EnvironmentName}-VPCID"
       SecurityGroupIngress: 
-        #- IpProtocol: tcp
-        #  FromPort: 22
-        #  ToPort: 22
-        #  CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
+
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
@@ -74,8 +67,8 @@ Resources:
         VPCZoneIdentifier:
         - Fn::ImportValue:
             Fn::Sub: "${EnvironmentName}-PRIV-NETS"
-        LaunchConfigurationName: 
-          Ref: "WebAppLaunchConfig"
+        LaunchTemplateName: 
+          Ref: "WebAppLaunchTemplate"
         MinSize: "3"
         MaxSize: "5"
         TargetGroupARNs:
