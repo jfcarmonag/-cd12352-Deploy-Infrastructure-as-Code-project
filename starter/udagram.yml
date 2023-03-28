@@ -67,8 +67,9 @@ Resources:
         VPCZoneIdentifier:
         - Fn::ImportValue:
             Fn::Sub: "${EnvironmentName}-PRIV-NETS"
-        LaunchTemplateName: 
-          Ref: "WebAppLaunchTemplate"
+        LaunchTemplate:    
+          LaunchTemplateName: 
+            Ref: "WebAppLaunchTemplate"
         MinSize: "3"
         MaxSize: "5"
         TargetGroupARNs:
