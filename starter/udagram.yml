@@ -4,6 +4,9 @@ Parameters:
   EnvironmentName: 
     Description: An environment name that will be prefixed to resources
     Type: String
+  S3BucketName:
+    Description: The name of the S3 bucket where the static website files are stored
+    Type: String
 
 Resources:
   InstanceRole:
@@ -146,7 +149,7 @@ Resources:
             apt-get update -y
             apt-get install nginx -y
             apt-get install awscli -y
-            aws s3 sync s3://${udacityproject-juan-static-website} /var/www/html
+            aws s3 sync s3://${S3BucketName} /var/www/html
             systemctl start nginx
             systemctl enable nginx
         ImageId: ami-007855ac798b5175e
