@@ -2,9 +2,5 @@
     {
         "ParameterKey": "EnvironmentName",
         "ParameterValue": "udacityproject-juan"
-    },
-    {
-        "ParameterKey": "S3BucketName",
-        "ParameterValue": "udacityproject-juan-static-website"
-      }
+    }
 ]
