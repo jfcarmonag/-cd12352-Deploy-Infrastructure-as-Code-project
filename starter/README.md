@@ -1,11 +1,19 @@
 # CD12352 - Infrastructure as Code Project Solution
-# [YOUR NAME HERE]
+# Juan
 
 ## Spin up instructions
-TODO
+For creating the network run:
+``./create.sh network network.yml network-parameters.json``
+For creating the app, run:
+``./create.sh udagram udagram.yml udagram-parameters.json``
 
 ## Tear down instructions
-TODO
+Run 
+``aws cloudformation delete-stack --stack-name network``
+``aws cloudformation delete-stack --stack-name udagram``
+
 
 ## Other considerations
-TODO (optional)
+The s3 bucket with the app is in the udagram parameters. It can be changed with
+your own bucket.
+
