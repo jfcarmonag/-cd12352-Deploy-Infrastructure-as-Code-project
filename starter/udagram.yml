@@ -146,7 +146,7 @@ Resources:
             apt-get update -y
             apt-get install nginx -y
             apt-get install awscli -y
-            aws s3 sync s3://${!Ref StaticWebsiteBucket} /var/www/html
+            aws s3 sync s3://${udacityproject-juan-static-website} /var/www/html
             systemctl start nginx
             systemctl enable nginx
         ImageId: ami-007855ac798b5175e
@@ -160,26 +160,9 @@ Resources:
             Ebs:
               VolumeSize: '10'
 
-  StaticWebsiteBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub "${EnvironmentName}-static-website"
-      AccessControl: PublicRead
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: error.html
+  
 
-  BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref StaticWebsiteBucket
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal: "*"
-            Action: "s3:GetObject"
-            Resource: !Sub "arn:aws:s3:::${StaticWebsiteBucket}/*"
+  
 
 Outputs:
   URL:
