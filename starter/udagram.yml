@@ -4,30 +4,8 @@ Parameters:
   EnvironmentName: 
     Description: An environment name that will be prefixed to resources
     Type: String
-  S3BucketName:
-    Description: The name of the S3 bucket where the static website files are stored
-    Type: String
 
 Resources:
-  InstanceRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ec2.amazonaws.com
-            Action: sts:AssumeRole
-      Path: /
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
-  InstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Path: /
-      Roles:
-        - Ref: InstanceRole
 
   WebServerSecGroup:
     Type: AWS::EC2::SecurityGroup
@@ -134,38 +112,28 @@ Resources:
               Values: [/]
             ListenerArn: !Ref Listener
             Priority: 1 
-  
-
-
- 
+  # Add your resources here
+  # We include a portion of the LaunchTemplate resource so you can use the UserData.
   WebAppLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
-    Properties:
-      LaunchTemplateName: 'UdagramLaunchTemplate'
+    Properties: 
       LaunchTemplateData:
         UserData:
-          Fn::Base64: !Sub |
+          Fn::Base64: |
             #!/bin/bash
             apt-get update -y
-            apt-get install nginx -y
-           # apt-get install awscli -y
-           # aws s3 sync s3://${S3BucketName} /var/www/html
-           # systemctl start nginx
-           # systemctl enable nginx
+            sudo apt-get install nginx -y
+            service nginx start
+
+        
         ImageId: ami-007855ac798b5175e
-        InstanceType: t3.micro
         SecurityGroupIds:
-          - Ref: WebServerSecGroup
-        IamInstanceProfile:
-          Arn: !GetAtt InstanceProfile.Arn
+        - Ref: WebServerSecGroup
+        InstanceType: t3.micro
         BlockDeviceMappings:
-          - DeviceName: "/dev/sdk"
-            Ebs:
-              VolumeSize: '10'
-
-  
-
-  
+        - DeviceName: "/dev/sdk"
+          Ebs:
+            VolumeSize: '10'
 
 Outputs:
   URL:
