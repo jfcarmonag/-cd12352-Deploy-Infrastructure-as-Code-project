@@ -147,17 +147,59 @@ Resources:
             apt-get update -y
             apt-get install nginx -y
             apt-get install awscli -y
-            
+            aws s3 sync s3://${S3BucketName} /var/www/html
+            systemctl start nginx
+            systemctl enable nginx
         ImageId: ami-007855ac798b5175e
         InstanceType: t3.micro
         SecurityGroupIds:
           - Ref: WebServerSecGroup
-        IamInstanceProfile:
-          Arn: !GetAtt InstanceProfile.Arn
+        IamInstanceProfile: !Ref ListS3BucketProfile
         BlockDeviceMappings:
           - DeviceName: "/dev/sdk"
             Ebs:
               VolumeSize: '10'
+  
+  ListS3BucketProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+      - Ref: S3BucketRole
+
+  S3BucketRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: 
+        !Sub ${EnvironmentName}-Role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+
+  S3BucketsPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: AmazonS3ReadOnlyAccess
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - s3:Get*
+          - s3:List*
+          Resource: "*"
+      Roles:
+      - Ref: S3BucketRole
+          
+
 
 
 
